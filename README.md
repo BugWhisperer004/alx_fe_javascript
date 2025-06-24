@@ -1,6 +1,7 @@
 Dynamic Quote Generator
 
 Overview
+
 The Dynamic Quote Generator is a web application that displays different quotes based on user-selected categories. It demonstrates advanced DOM manipulation techniques, web storage integration, JSON handling, and simulated server synchronization with conflict resolution - all implemented using vanilla JavaScript without any frameworks.
 
 Features include:
