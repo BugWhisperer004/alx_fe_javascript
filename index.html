@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic Quote Generator</title>
     <style>
         body {
@@ -38,6 +38,7 @@
             background: #f8d7da;
             padding: 15px;
             margin: 15px 0;
+            display: none;
         }
     </style>
 </head>
@@ -50,23 +51,23 @@
     <div class="controls">
         <button id="newQuote">Show New Quote</button>
 
-        <select id="categoryFilter">
+        <select id="categoryFilter" onchange="filterQuotes()">
             <option value="all">All Categories</option>
         </select>
 
-        <button id="exportBtn">Export Quotes</button>
-        <input type="file" id="importFile" accept=".json">
+        <button id="exportBtn" onclick="exportQuotes()">Export Quotes</button>
+        <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
     </div>
 
-    <div id="quoteDisplay"></div>
+    <div id="quoteDisplay" class="quote"></div>
 
     <div class="controls">
-        <input id="newQuoteText" type="text" placeholder="Enter a new quote">
-        <input id="newQuoteCategory" type="text" placeholder="Enter quote category">
-        <button id="addQuoteBtn">Add Quote</button>
+        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+        <button onclick="addQuote()">Add Quote</button>
     </div>
 
-    <div id="conflictResolution" class="conflict-resolution" style="display: none;">
+    <div id="conflictResolution" class="conflict-resolution">
         <h3>Conflict Detected!</h3>
         <p>Server version: <span id="serverQuote"></span></p>
         <p>Your version: <span id="localQuote"></span></p>
@@ -75,6 +76,7 @@
     </div>
 
     <script src="script.js"></script>
+
 </body>
 
 </html>

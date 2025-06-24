@@ -3,9 +3,10 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     { text: "Simplicity is the ultimate sophistication.", category: "Wisdom" },
 ];
 
-document.getElementById('newQuote').addEventListener('click', showRandomQuote);
+// Event listener for 'Show New Quote' button
+document.getElementById('newQuote').addEventListener('click', displayRandomQuote);
 
-function showRandomQuote() {
+function displayRandomQuote() {
     const category = localStorage.getItem('selectedCategory') || 'all';
     const filteredQuotes = category === 'all' ? quotes : quotes.filter(q => q.category === category);
     if (filteredQuotes.length === 0) return alert("No quotes in this category.");
@@ -47,7 +48,7 @@ function populateCategories() {
 function filterQuotes() {
     const selected = document.getElementById('categoryFilter').value;
     localStorage.setItem('selectedCategory', selected);
-    showRandomQuote();
+    displayRandomQuote();
 }
 
 function exportQuotes() {
@@ -75,5 +76,5 @@ window.onload = () => {
     populateCategories();
     const savedCategory = localStorage.getItem('selectedCategory');
     if (savedCategory) document.getElementById('categoryFilter').value = savedCategory;
-    showRandomQuote();
+    displayRandomQuote();
 };
