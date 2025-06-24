@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Quote Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .quote {
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #ccc;
+        }
+
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .notification {
+            background: #d4edda;
+            padding: 10px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .conflict-resolution {
+            background: #f8d7da;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dynamic Quote Generator</h1>
+
+    <div id="notification" class="notification"></div>
+
+    <div class="controls">
+        <button id="newQuote">Show New Quote</button>
+
+        <select id="categoryFilter" onchange="filterQuotes()">
+            <option value="all">All Categories</option>
+        </select>
+
+        <button id="exportBtn" onclick="exportQuotes()">Export Quotes</button>
+        <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    </div>
+
+    <div id="quoteDisplay" class="quote"></div>
+
+    <div class="controls">
+        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+        <button onclick="addQuote()">Add Quote</button>
+    </div>
+
+    <div id="conflictResolution" class="conflict-resolution">
+        <h3>Conflict Detected!</h3>
+        <p>Server version: <span id="serverQuote"></span></p>
+        <p>Your version: <span id="localQuote"></span></p>
+        <button id="useServerBtn">Use Server Version</button>
+        <button id="useLocalBtn">Keep Local Version</button>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
