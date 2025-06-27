@@ -22,6 +22,7 @@ function addQuote() {
 
     quotes.push({ text, category });
     saveQuotes();
+    saveToServer();
     populateCategories();
     alert("Quote added successfully!");
     document.getElementById('newQuoteText').value = '';
@@ -31,6 +32,12 @@ function addQuote() {
 function saveQuotes() {
     localStorage.setItem('quotes', JSON.stringify(quotes));
 }
+
+function saveToServer() {
+    sessionStorage.setItem('serverQuotes', JSON.stringify(quotes));
+}
+
+saveToServer();
 
 function populateCategories() {
     const select = document.getElementById('categoryFilter');
@@ -98,6 +105,41 @@ function createAddQuoteForm() {
     document.body.appendChild(controlsDiv);
 }
 
+function fetchQuotesFromServer() {
+    const serverData = sessionStorage.getItem('serverQuotes');
+    return serverData ? JSON.parse(serverData) : [];
+}
+
+function syncQuotes() {
+    setInterval(() => {
+        const serverQuotes = fetchQuotesFromServer();
+        const localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
+
+        if (JSON.stringify(serverQuotes) !== JSON.stringify(localQuotes)) {
+            // Show conflict resolution UI
+            document.getElementById('conflictResolution').style.display = 'block';
+            document.getElementById('serverQuote').textContent = JSON.stringify(serverQuotes, null, 2);
+            document.getElementById('localQuote').textContent = JSON.stringify(localQuotes, null, 2);
+
+            // Conflict resolution handlers
+            document.getElementById('useServerBtn').onclick = () => {
+                quotes = serverQuotes;
+                saveQuotes();
+                populateCategories();
+                showRandomQuote();
+                document.getElementById('conflictResolution').style.display = 'none';
+            };
+
+            document.getElementById('useLocalBtn').onclick = () => {
+                saveToServer();
+                document.getElementById('conflictResolution').style.display = 'none';
+            };
+        }
+    }, 10000); // every 10 seconds
+}
+
+
+
 window.onload = () => {
     populateCategories();
     const savedCategory = localStorage.getItem('selectedCategory');
@@ -105,5 +147,7 @@ window.onload = () => {
         document.getElementById('categoryFilter').value = savedCategory;
     }
     showRandomQuote();
-    createAddQuoteForm(); // 👈 dynamically adds the add-quote form
+    createAddQuoteForm();
+    syncQuotes();
+
 };
