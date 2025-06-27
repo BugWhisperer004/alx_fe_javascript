@@ -4,15 +4,16 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
 ];
 
 // Event listener for 'Show New Quote' button
-document.getElementById('newQuote').addEventListener('click', displayRandomQuote);
-
-function displayRandomQuote() {
+function showRandomQuote() {
     const category = localStorage.getItem('selectedCategory') || 'all';
     const filteredQuotes = category === 'all' ? quotes : quotes.filter(q => q.category === category);
     if (filteredQuotes.length === 0) return alert("No quotes in this category.");
     const quote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
     document.getElementById('quoteDisplay').innerText = quote.text;
 }
+
+document.getElementById('newQuote').addEventListener('click', showRandomQuote);
+
 
 function addQuote() {
     const text = document.getElementById('newQuoteText').value.trim();
@@ -76,5 +77,5 @@ window.onload = () => {
     populateCategories();
     const savedCategory = localStorage.getItem('selectedCategory');
     if (savedCategory) document.getElementById('categoryFilter').value = savedCategory;
-    displayRandomQuote();
+    showRandomQuote();
 };
