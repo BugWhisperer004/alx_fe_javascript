@@ -3,6 +3,75 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     { text: "Simplicity is the ultimate sophistication.", category: "Wisdom" },
 ];
 
+async function fetchQuotesFromServer() {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    const data = await response.json();
+
+    return data.slice(0, 5).map(post => ({
+        text: post.title,
+        category: 'Server'
+    }));
+}
+
+async function postQuoteToServer(quote) {
+    await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        body: JSON.stringify(quote),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        }
+    });
+}
+
+async function addQuote() {
+    const text = document.getElementById('newQuoteText').value.trim();
+    const category = document.getElementById('newQuoteCategory').value.trim();
+    if (!text || !category) return alert("Please fill in both fields.");
+
+    const newQuote = { text, category };
+    quotes.push(newQuote);
+    saveQuotes();
+    populateCategories();
+    alert("Quote added successfully!");
+    document.getElementById('newQuoteText').value = '';
+    document.getElementById('newQuoteCategory').value = '';
+
+    await postQuoteToServer(newQuote);
+}
+
+async function syncQuotes() {
+    setInterval(async () => {
+        const serverQuotes = await fetchQuotesFromServer();
+        const localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
+
+        // Only compare the 'text' values to keep things simple
+        const serverTexts = serverQuotes.map(q => q.text).join(',');
+        const localTexts = localQuotes.map(q => q.text).join(',');
+
+        if (serverTexts !== localTexts) {
+            document.getElementById('conflictResolution').style.display = 'block';
+            document.getElementById('serverQuote').textContent = JSON.stringify(serverQuotes, null, 2);
+            document.getElementById('localQuote').textContent = JSON.stringify(localQuotes, null, 2);
+
+            document.getElementById('useServerBtn').onclick = () => {
+                quotes = serverQuotes;
+                saveQuotes();
+                populateCategories();
+                showRandomQuote();
+                document.getElementById('conflictResolution').style.display = 'none';
+            };
+
+            document.getElementById('useLocalBtn').onclick = async () => {
+                for (const q of localQuotes) {
+                    await postQuoteToServer(q);
+                }
+                document.getElementById('conflictResolution').style.display = 'none';
+            };
+        }
+    }, 10000);
+}
+
+
 // Event listener for 'Show New Quote' button
 function showRandomQuote() {
     const category = localStorage.getItem('selectedCategory') || 'all';
