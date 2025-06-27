@@ -9,7 +9,7 @@ function showRandomQuote() {
     const filteredQuotes = category === 'all' ? quotes : quotes.filter(q => q.category === category);
     if (filteredQuotes.length === 0) return alert("No quotes in this category.");
     const quote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
-    document.getElementById('quoteDisplay').innerText = quote.text;
+    document.getElementById('quoteDisplay').textContent = quote.text;
 }
 
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
@@ -40,7 +40,7 @@ function populateCategories() {
     categories.forEach(cat => {
         const option = document.createElement('option');
         option.value = cat;
-        option.innerText = cat;
+        option.textContent = cat;
         select.appendChild(option);
     });
     select.value = current;
