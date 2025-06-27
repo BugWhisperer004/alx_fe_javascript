@@ -83,6 +83,16 @@ function showRandomQuote() {
 
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 
+function showNotification(message) {
+    const note = document.getElementById('notification');
+    note.textContent = message;
+    note.style.display = 'block';
+    setTimeout(() => {
+        note.style.display = 'none';
+    }, 3000);
+}
+
+
 
 function addQuote() {
     const text = document.getElementById('newQuoteText').value.trim();
@@ -197,6 +207,8 @@ function syncQuotes() {
                 populateCategories();
                 showRandomQuote();
                 document.getElementById('conflictResolution').style.display = 'none';
+                showNotification("Quotes synced with server!");
+
             };
 
             document.getElementById('useLocalBtn').onclick = () => {
